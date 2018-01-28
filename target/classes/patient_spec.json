@@ -1,0 +1,62 @@
+[
+  {
+    "operation": "shift",
+    "spec": {
+      "uuid" : "id",
+      "#Patient": "resourceType",
+      "identifiers" : {
+        "*": {
+          "uuid" : "identifier[&1].id",
+          "#usual": "identifier[&1].use",
+          "display" : "identifier[&1].system",
+          "identifier" : "identifier[&1].value"
+        }
+      },
+      "voided" : "active",
+      "person" : {
+        "gender" : {
+          "M": {
+            "#male": "gender"
+          },
+          "m": {
+            "#male": "gender"
+          },
+          "F": {
+            "#female": "gender"
+          },
+          "f": {
+            "#female": "gender"
+          }
+        },
+        "birthdate" : "birthDate",
+        "dead" : "deceasedBoolean",
+        "deathDate" : "deceasedDateTime",
+        "names" :  {
+          "*": {
+            "uuid" : "name[&1].id",
+            "display" : "name[&1].text",
+            "givenName" : "name[&1].given",
+            "middleName" : "name[&1].given",
+            "familyName" : "name[&1].family"
+          }
+        } ,
+        "addresses" : {
+          "*": {
+            "uuid" : "address[&1].id",
+            "display" : "address[&1].text",
+            "#home" : "address[&1].use",
+            "address1" : "address[&1].line",
+            "address2" : "address[&1].line",
+            "cityVillage" : "address[&1].city",
+            "stateProvince" : "address[&1].state",
+            "country" : "address[&1].country",
+            "postalCode" : "address[&1].postalCode",
+            "countyDistrict" : "address[&1].district",
+            "startDate" : "address[&1].period.startDate",
+            "endDate" : "address[&1].period.endDate"
+          }
+        }
+      }
+    }
+  }
+]
