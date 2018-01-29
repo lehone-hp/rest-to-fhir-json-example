@@ -14,6 +14,13 @@ public class Main {
 		JSONObject transformedPatientJson = PatientUtil.toFHIRPatient(patientResource);
 
 		System.out.println(JsonUtils.toPrettyJsonString(transformedPatientJson));
+
+		if (transformedPatientJson != null) {
+			String responseStatus = PatientService.postPatient(transformedPatientJson);
+			System.out.println("Posted transformed resource to https://fhirtest.uhn.ca/ \n"
+					+ "Status: " +responseStatus);
+		}
+
 	}
 
 }

@@ -8,13 +8,13 @@
         "*": {
           "uuid" : "identifier[&1].id",
           "#usual": "identifier[&1].use",
-          "display" : "identifier[&1].system",
           "identifier" : "identifier[&1].value"
         }
       },
       "voided" : "active",
       "person" : {
         "gender" : {
+          // set the value of gender to "male" if "M or m" and "female" if "F or f"
           "M": {
             "#male": "gender"
           },
@@ -29,32 +29,91 @@
           }
         },
         "birthdate" : "birthDate",
-        "dead" : "deceasedBoolean",
-        "deathDate" : "deceasedDateTime",
+        //"dead" : "deceasedBoolean",
+        //FHIR requires either deceasedDateTime or deceasedBoolean but not bothe
+        "deathDate" : {
+          "*" : {
+            "@1" : "deceasedDateTime"
+          }
+        },
         "names" :  {
           "*": {
             "uuid" : "name[&1].id",
             "display" : "name[&1].text",
-            "givenName" : "name[&1].given",
-            "middleName" : "name[&1].given",
-            "familyName" : "name[&1].family"
+            "givenName" : {   // if givenName is not null, add it to name.given
+              "*" : {
+                "@1" : "name[&3].given"
+              }
+            },
+            "middleName" : {  // if middleName is not null, add it to name.given
+              "*" : {
+                "@1" : "name[&3].given"
+              }
+            },
+            "familyName" : {  // if familyName is not null, add it to name.family
+              "*" : {
+                "@1" : "name[&3].family"
+              }
+            }
           }
         } ,
         "addresses" : {
-          "*": {
+          "*": { // for all the addresses
+            /* Check all fields and include only if value is not null*/
             "uuid" : "address[&1].id",
             "display" : "address[&1].text",
-            "#home" : "address[&1].use",
-            "address1" : "address[&1].line",
-            "address2" : "address[&1].line",
-            "cityVillage" : "address[&1].city",
-            "stateProvince" : "address[&1].state",
-            "country" : "address[&1].country",
-            "postalCode" : "address[&1].postalCode",
-            "countyDistrict" : "address[&1].district",
-            "startDate" : "address[&1].period.startDate",
-            "endDate" : "address[&1].period.endDate"
+            "#home" : "address[&1].use",  // set use for all addresses to "home"
+            "address1" : {
+              "*" : {
+                "@1" : "address[&3].line"
+              }
+            },
+            "address2" : {
+              "*" : {
+                "@1" : "address[&3].line"
+              }
+            },
+            "cityVillage" : {
+              "*" : {
+                "@1" : "address[&3].city"
+              }
+            },
+            "stateProvince" : {
+              "*" : {
+                "@1" : "address[&3].state"
+              }
+            },
+            "country" : {
+              "*" : {
+                "@1" : "address[&3].country"
+              }
+            },
+            "postalCode" : {
+              "*" : {
+                "@1" : "address[&3].postalCode"
+              }
+            },
+            "countyDistrict" : {
+              "*" : {
+                "@1" : "address[&3].district"
+              }
+            },
+            "startDate" : {
+              "*" : {
+                "@1" : "address[&3].period.startDate"
+              }
+            },
+            "endDate" : {
+              "*" : {
+                "@1" : "address[&3].period.endDate"
+              }
+            }
           }
+        }
+      },
+      "links" :{
+        "*" : {
+          "uri" : "identifier[&1].system"
         }
       }
     }
