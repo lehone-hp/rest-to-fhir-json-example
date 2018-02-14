@@ -6,8 +6,9 @@ import org.json.simple.JSONObject;
 
 public class PatientService {
 
-	private final static String patientUrl = "https://radiology.librehealth.io/lh-toolkit/ws/rest/v1/patient";
-	private final static String postPatientUrl
+	private final static String getPatientUrl = "https://radiology.librehealth.io/lh-toolkit/ws/rest/v1/patient";
+	private final static String createPatientUrl = "https://radiology.librehealth.io/lh-toolkit/ws/rest/v1/patient";
+	private final static String validatePatientUrl
 			= "https://fhirtest.uhn.ca/baseDstu3/Patient/$validate?_format=json&profile=http://hl7.org/fhir/StructureDefinition/Patient";
 
 	/**
@@ -16,7 +17,7 @@ public class PatientService {
 	 * @return json string representation of Patient
 	 */
 	public static String getPatientByUUid(String uuid) {
-		return HttpClientService.getResource(patientUrl+"/"+uuid+"?v=full");
+		return HttpClientService.getResource(getPatientUrl+"/"+uuid+"?v=full");
 	}
 
 	/**
@@ -24,7 +25,16 @@ public class PatientService {
 	 * @param resource, fhir patient json
 	 * @return response status
 	 */
-	public static String postPatient(JSONObject resource) throws IOException{
-		return HttpClientService.postResource(postPatientUrl, resource);
+	public static String validateFHIRResource(JSONObject resource) throws IOException{
+		return HttpClientService.validateFHIRResource(validatePatientUrl, resource);
+	}
+
+	/**
+	 * Post converted Patient REST json for validation
+	 * @param resource, LibreHealth patient json
+	 * @return response status
+	 */
+	public static String postLHPatient(JSONObject resource) throws IOException {
+		return HttpClientService.createLHPatient(createPatientUrl, resource);
 	}
 }

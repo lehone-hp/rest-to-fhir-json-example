@@ -65,7 +65,7 @@ public class HttpClientService {
 	 * Posts resource to https://fhirtest.uhn.ca/ for validation
 	 * @return Status Line of the response
 	 */
-	public static String postResource(String url, JSONObject resource) throws IOException{
+	public static String validateFHIRResource(String url, JSONObject resource) throws IOException{
 
 		HttpPost request = new HttpPost(url);
 
@@ -100,4 +100,37 @@ public class HttpClientService {
 		return response.getStatusLine().getReasonPhrase();
 	}
 
+	public static String createLHPatient(String url, JSONObject resource) throws IOException{
+
+		HttpPost request = new HttpPost(url);
+
+		StringEntity stringEntity = new StringEntity(JsonUtils.toJsonString(resource));
+		request.setEntity(stringEntity);
+
+		// add header
+		request.addHeader(HttpHeaders.ACCEPT_CHARSET, "utf-8");
+		request.addHeader(HttpHeaders.ACCEPT, "application/json");
+		request.addHeader(HttpHeaders.CONTENT_TYPE, "application/json");
+
+		HttpResponse response = client.execute(request);
+
+		BufferedReader rd = new BufferedReader(
+				new InputStreamReader(response.getEntity().getContent()));
+
+		StringBuffer result = new StringBuffer();
+		String line;
+		while ((line = rd.readLine()) != null) {
+			result.append(line);
+		}
+
+		System.out.println("\nResponse Body\n");
+		try {
+			// print the response body in pretty json
+			System.out.println(JsonUtils.toPrettyJsonString(new JSONParser().parse(result.toString())));
+		} catch (ParseException pe) {
+			System.out.println(result.toString());
+		}
+
+		return response.getStatusLine().getReasonPhrase();
+	}
 }

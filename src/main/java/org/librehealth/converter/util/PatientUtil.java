@@ -38,6 +38,25 @@ public class PatientUtil {
 		jsonTransformedOutput.put("birthDate", dateFormat.format(date));
 
 		return jsonTransformedOutput;
+	}
+	
+	/**
+	 * Converts FHIR patient Json to LH Patient Json
+	 * @param patientJson, string representation of Patient Json
+	 * @return LH Json representation of transformed Patient
+	 */
+	public static JSONObject toLHPatient (String fhirPatientJson) throws ParseException,
+			java.text.ParseException {
 
+		List chainrSpecJSON = JsonUtils.filepathToList( "src/main/resources/patient_reverse_spec.json" );
+		Chainr chainr = Chainr.fromSpec( chainrSpecJSON );
+
+		Object input = new JSONParser().parse(fhirPatientJson);
+		Object transformedOutput = chainr.transform( input );
+
+		JSONObject jsonTransformedOutput =
+				(JSONObject) new JSONParser().parse(JsonUtils.toPrettyJsonString( transformedOutput ));
+
+		return jsonTransformedOutput;
 	}
 }

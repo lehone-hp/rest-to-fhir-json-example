@@ -16,11 +16,16 @@ public class Main {
 		System.out.println(JsonUtils.toPrettyJsonString(transformedPatientJson));
 
 		if (transformedPatientJson != null) {
-			String responseStatus = PatientService.postPatient(transformedPatientJson);
+			String responseStatus = PatientService.validateFHIRResource(transformedPatientJson);
 			System.out.println("Posted transformed resource to https://fhirtest.uhn.ca/ \n"
 					+ "Status: " +responseStatus);
 		}
 
+		//TODO convert patient back to rest and post in radiology.librehealth.io
+		JSONObject lhPatientJson = PatientUtil.toLHPatient(JsonUtils.toPrettyJsonString(transformedPatientJson));
+		System.out.println("LibreHealth Patient\n" +JsonUtils.toPrettyJsonString(lhPatientJson));		
+
+		System.out.println(PatientService.postLHPatient(lhPatientJson));
 	}
 
 }

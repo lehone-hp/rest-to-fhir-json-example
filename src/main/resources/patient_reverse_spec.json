@@ -1,0 +1,55 @@
+[
+  {
+    "operation": "shift",
+    "spec": {
+      "id" : "uuid",
+      "identifier" : {
+        "*" : {
+          "id" : "identifiers[&1].uuid",
+          "value" : "identifiers[&1].identifier"
+        } },
+      "active" : "voided",
+      "gender" : {    // set the value of gender to "male" if "M or m" and "female" if "F or f"
+        "male": {
+          "#M": "person.gender"
+        },
+        "female": {
+          "#F": "person.gender"
+        }
+      },
+      "birthDate" : "person.birthdate",
+      "deceasedBoolean" : "person.dead",
+      "deceasedDateTime" : "person.deathDate",
+      "name" :  {
+        "*" : {
+          "id" : "person.names[&1].uuid",
+          "text" : "person.names[&1].display",
+          "given" : {
+            "0" : "person.names[&2].givenName",
+            "1" : "person.names[&2].middleName"
+          },
+          "family" : "person.names[&1].familyName"
+        }
+      },
+      "address" : {
+        "*" : {
+          "id" : "person.address[&1].uuid",
+          "text" : "person.address[&1].display",
+          "line" : {
+            "0" : "person.address[&2].address1",
+            "1" : "person.address[&2].address2"
+          },
+          "city" : "person.address[&1].cityVillage",
+          "state" : "person.address[&1].stateProvince",
+          "country" : "person.address[&1].country",
+          "postalCode" : "person.address[&1].postalCode",
+          "district" : "person[&2].address[&2].countyDistrict",
+          "period" : {
+            "startDate" : "person.address[&2].startDate",
+            "endDate" : "person.address[&2].endDate"
+          }
+        }
+      }
+    }
+  }
+]
